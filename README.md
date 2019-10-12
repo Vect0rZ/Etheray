@@ -5,6 +5,10 @@
     A very simple ray tracer written from scratch in C
 </p>
 
+<p>
+    <img src="https://imgur.com/91NKuuZ.png" />
+</p>
+
 # Features
 
 ### File Format
