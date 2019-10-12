@@ -1,3 +1,5 @@
+#include <math.h>
+#include <stdio.h>
 #include "vector3.h"
 
 Vec3 create_vec3(float x, float y, float z)

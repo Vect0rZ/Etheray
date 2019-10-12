@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include "color3f.h"
 #include "constants.h"
 

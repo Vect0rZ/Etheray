@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include "matrix4x4.h"
 #include "constants.h"
 
@@ -35,12 +36,14 @@ M4x4 translate_m4x4(Vec3 v)
 
 M4x4 rotate_m4x4(Vec3 v)
 {
-	
+	// TODO: Implement
+	return create_identity_m4x4();
 }
 
 M4x4 scale_m4x4(Vec3 v)
 {
-	
+	// TODO: Implement
+	return create_identity_m4x4();
 }
 
 M4x4 mul_m4x4(M4x4 m1, M4x4 m2)
