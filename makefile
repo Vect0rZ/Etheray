@@ -3,4 +3,4 @@ OUTPUT = etheray
 DEPS = color.h color3f.h constants.h enums.h material.h matrix4x4.h object.h plane.h sphere.h triangle.h vector3.h
 
 make: $(OBJ)
-	gcc -o $(OUTPUT) $(OBJ) -I.
+	gcc -o bin/$(OUTPUT) $(OBJ) -I.
