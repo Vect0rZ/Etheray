@@ -9,6 +9,7 @@
 #include "vector3.h"
 #include "object.h"
 #include "matrix4x4.h"
+#include "material.h"
 #include "color3f.h"
 
 typedef struct screen
@@ -136,8 +137,6 @@ Color3f ambient(Ray *ray, Intersection *intersection);
 Color3f phong(Ray *ray, Intersection *intersection, Light *light, Object* objects, int count);
 Color3f reflection(Ray *ray, Intersection *intersection, Object *objects, int count, Light* light, int depth);
 /* Material methods */
-Material c_mat(MaterialType type, Color3f ambient, Color3f specular, Color3f diffuse, float shininess, float reflectivity);
-
 
 int main(int argc, char** argv)
 {
@@ -918,17 +917,4 @@ Color3f reflection(Ray *ray, Intersection *intersection, Object *objects, int co
 	}
 	 
 	return c;
-}
-
-Material c_mat(MaterialType type, Color3f ambient, Color3f specular, Color3f diffuse, float shininess, float reflectivity)
-{
-	Material res;
-	res.type = type;
-	res.ambient = ambient;
-	res.specular = specular;
-	res.diffuse = diffuse;
-	res.shininess = shininess;
-	res.reflectivity = reflectivity;
-	
-	return res;
 }
