@@ -118,9 +118,6 @@ void set_at(bmp16* bmp, bmp16_pixel pixel, int i, int j);
 
 
 Camera create_camera(Vec3 origin, float fov, float pDist, int w, int h);
-Object create_sphere(Vec3 origin, float radius, Material material);
-Object create_plane(Vec3 point, Vec3 normal, Material material);
-Object create_triangle(Vec3 v0, Vec3 v1, Vec3 v2, Material material);
 /* Raytracing methods */
 Ray pixel_trace(Camera *camera, int i, int j, float bx, float by);
 Ray generate_pixel_ray(SamplingMethod method, Camera* camera, int i, int j, int maxRays, int currentRay);
@@ -476,48 +473,6 @@ Camera create_camera(Vec3 origin, float fov, float pDist, int w, int h)
 	res.screen = sc;
 	
 	printf("AR: %f", sc.aspect_ratio);
-	return res;
-}
-
-Object create_sphere(Vec3 origin, float radius, Material material)
-{
-	Object res;
-	
-	Sphere sp;
-	sp.origin = origin;
-	sp.radius = radius;
-
-	res.Obj.sphere = sp;
-	res.type = SPHERE;
-	res.mat = material;
-	return res;
-}
-
-Object create_plane(Vec3 point, Vec3 normal, Material material)
-{
-	Object res;
-	Plane plane;
-	plane.point = point;
-	plane.normal = normal;
-
-	res.Obj.plane = plane;
-	res.type = PLANE;
-	res.mat = material;
-	
-	return res;
-}
-
-Object create_triangle(Vec3 v0, Vec3 v1, Vec3 v2, Material material)
-{
-	Object res;
-	Triangle triangle;
-	triangle.v0 = v0;
-	triangle.v1 = v1;
-	triangle.v2 = v2;
-	res.Obj.triangle = triangle;
-	res.type = TRIANGLE;
-	res.mat = material;
-	
 	return res;
 }
 
