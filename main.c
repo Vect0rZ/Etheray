@@ -12,21 +12,7 @@
 #include "material.h"
 #include "color3f.h"
 #include "bmp16.h"
-
-typedef struct screen
-{
-	int width;
-	int height;
-	float aspect_ratio;
-}Screen;
-
-typedef struct camera
-{
-	Vec3 origin;
-	float fov;
-	float plane_distance;
-	Screen screen;
-}Camera;
+#include "camera.h"
 
 typedef struct ray
 {
@@ -42,7 +28,6 @@ typedef struct light
 	Color3f ambient;
 }Light;
 
-
 typedef struct intersection_data
 {
 	int has_intersection;
@@ -52,21 +37,10 @@ typedef struct intersection_data
 	Color3f col;
 }Intersection;
 
-
-
-/* Begin New methods */
-
 /* Process helper methods */
 unsigned char truncate(int color);
 
-/* End New methods */
 
-/* Matrix methods */
-
-/* Create methods */
-
-
-Camera create_camera(Vec3 origin, float fov, float pDist, int w, int h);
 /* Raytracing methods */
 Ray pixel_trace(Camera *camera, int i, int j, float bx, float by);
 Ray generate_pixel_ray(SamplingMethod method, Camera* camera, int i, int j, int maxRays, int currentRay);
@@ -201,27 +175,6 @@ unsigned char truncate(int color)
 		return 255;
 	
 	return color;
-}
-
-Camera create_camera(Vec3 origin, float fov, float pDist, int w, int h)
-{
-	Camera res;
-	Screen sc;
-	
-	res.origin = origin;
-	res.fov = fov;
-	res.plane_distance = pDist;
-	
-	sc.width = w;
-	sc.height = h;
-	sc.aspect_ratio = (float)w / (float)h;
-	printf("W: %i, H: %i\n", w, h);
-	
-	
-	res.screen = sc;
-	
-	printf("AR: %f", sc.aspect_ratio);
-	return res;
 }
 
 /*
