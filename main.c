@@ -134,24 +134,11 @@ int main(int argc, char** argv)
 	}
 	printf("Done looping. Max distance: %f, Min distance %f;", max_dist, min_distance);
 	save_optimized(bmp);
+	
 	free(bmp->pixels);
 	free(bmp);
-    return 0;
-}
 
-
-int debug = 0;
-
-
-/*
-	Reads an int from a given file descriptor and advances the stream by sizeof(int) bytes
-*/
-int read_int(FILE* fd)
-{
-	int result;
-	fread(&result, sizeof(int), 1, fd);
-	
-	return result;
+	return 0;
 }
 
 /*
