@@ -13,20 +13,13 @@
 #include "color3f.h"
 #include "bmp16.h"
 #include "camera.h"
+#include "light.h"
 
 typedef struct ray
 {
 	Vec3 origin;
 	Vec3 direction;
 } Ray;
-
-typedef struct light
-{
-	Vec3 origin;
-	Vec3 direction;
-	float intensity;
-	Color3f ambient;
-}Light;
 
 typedef struct intersection_data
 {
@@ -36,10 +29,6 @@ typedef struct intersection_data
 	Object obj;
 	Color3f col;
 }Intersection;
-
-/* Process helper methods */
-unsigned char truncate(int color);
-
 
 /* Raytracing methods */
 Ray pixel_trace(Camera *camera, int i, int j, float bx, float by);
@@ -52,7 +41,6 @@ Intersection intersects(Ray *ray, Object *objects, int count);
 Intersection ray_trace(Ray *ray, Object *objects, int count, Light *light, int depth);
 Ray reflection_ray(Vec3 point, Vec3 normal);
 /* Light methods */
-Light create_light(Vec3 origin, Vec3 direction, Color3f ambient, float intensity);
 Color3f ambient(Ray *ray, Intersection *intersection);
 Color3f phong(Ray *ray, Intersection *intersection, Light *light, Object* objects, int count);
 Color3f reflection(Ray *ray, Intersection *intersection, Object *objects, int count, Light* light, int depth);
@@ -164,17 +152,6 @@ int read_int(FILE* fd)
 	fread(&result, sizeof(int), 1, fd);
 	
 	return result;
-}
-
-
-unsigned char truncate(int color)
-{
-	if (color < 0)
-		return 0;
-	if (color > 255)
-		return 255;
-	
-	return color;
 }
 
 /*
@@ -478,19 +455,6 @@ Vec3 reflect(Vec3 in, Vec3 surface_normal)
 	refl = sub_vectors(in, double_normal);
 	normalize(&refl);
 	return refl;
-}
-
-Light create_light(Vec3 origin, Vec3 direction, Color3f ambient, float intensity)
-{
-	Light res;
-	res.origin = origin;
-	res.intensity = intensity;
-	res.direction = direction;
-	res.ambient = ambient;
-	
-	normalize(&res.direction);
-	
-	return res;
 }
 
 Color3f ambient(Ray *ray, Intersection *intersection)
