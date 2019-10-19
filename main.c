@@ -14,6 +14,7 @@
 #include "bmp16.h"
 #include "camera.h"
 #include "light.h"
+#include "intersection.h"
 
 typedef struct ray
 {
@@ -21,19 +22,9 @@ typedef struct ray
 	Vec3 direction;
 } Ray;
 
-typedef struct intersection_data
-{
-	int has_intersection;
-	float distance;
-	Vec3 point;
-	Object obj;
-	Color3f col;
-}Intersection;
-
 /* Raytracing methods */
 Ray pixel_trace(Camera *camera, int i, int j, float bx, float by);
 Ray generate_pixel_ray(SamplingMethod method, Camera* camera, int i, int j, int maxRays, int currentRay);
-Ray random_pixel_ray(Camera *camera, int i, int j);
 Intersection ray_sphere_intersection(Ray *ray, Sphere *sphere);
 Intersection ray_plane_intersection(Ray *ray, Plane *plane);
 Intersection ray_triangle_intersection(Ray *ray, Triangle *triangle);
@@ -233,14 +224,6 @@ Ray generate_pixel_ray(SamplingMethod method, Camera* camera, int i, int j, int 
 		}
 	}
 	
-	return pixel_trace(camera, i, j, bx, by);
-}
-
-Ray random_pixel_ray(Camera *camera, int i, int j)
-{
-	float bx = 1.0f / ((rand() % RAYS_PER_PIXEL) + 1);
-	float by = 1.0f / ((rand() % RAYS_PER_PIXEL) + 1);
-
 	return pixel_trace(camera, i, j, bx, by);
 }
 
