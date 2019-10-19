@@ -144,9 +144,9 @@ int main(int argc, char** argv)
 Ray pixel_trace(Camera *camera, int i, int j, float bx, float by)
 {
 	/* The carhtesian coordinate system. */
-	M4x4 world_coordinate_space = create_identity_m4x4();
-	M4x4 camera_translate = translate_m4x4(vec3_new(-1, 3, 1));
-	M4x4 camera_coordinate_space = mul_m4x4(camera_translate, world_coordinate_space);
+	M4x4 world_coordinate_space = m4x4_create_identity();
+	M4x4 camera_translate = m4x4_translate(vec3_new(-1, 3, 1));
+	M4x4 camera_coordinate_space = m4x4_mul(camera_translate, world_coordinate_space);
 	
 	/* Fake a rotation since the rotation matrix is not yet supported */
 	// camera_coordinate_space.m[0][0] += 0.5;
@@ -177,8 +177,8 @@ Ray pixel_trace(Camera *camera, int i, int j, float bx, float by)
 	/* Default camera orientation is the negative Z direction. Cx, Cy, -1 */
 	/* Transform both the origin and direction to the camera's coordinate system */
 	/* (Or we can transform the whole direction after substracting the origin and the point) */
-	ray.origin = mul_m4x4_vec3(camera_coordinate_space, ray.origin);
-	ray.direction = mul_m4x4_vec3(camera_coordinate_space, vec3_new(Cx, Cy, -1));
+	ray.origin = m4x4_mul_vec3(camera_coordinate_space, ray.origin);
+	ray.direction = m4x4_mul_vec3(camera_coordinate_space, vec3_new(Cx, Cy, -1));
 	ray.direction = vec3_sub(ray.direction, ray.origin);
 	vec3_normalize(&ray.direction);
 

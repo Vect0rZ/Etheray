@@ -2,7 +2,7 @@
 #include "matrix4x4.h"
 #include "constants.h"
 
-M4x4 create_identity_m4x4()
+M4x4 m4x4_create_identity()
 {
 	M4x4 res;
 	res.m[0][0] = 1; res.m[0][1] = 0; res.m[0][2] = 0; res.m[0][3] = 0;
@@ -13,7 +13,7 @@ M4x4 create_identity_m4x4()
 	return res;
 }
 
-M4x4 create_zero_m4x4()
+M4x4 m4x4_create_zero()
 {
 	M4x4 res;
 	res.m[0][0] = 0; res.m[0][1] = 0; res.m[0][2] = 0; res.m[0][3] = 0;
@@ -24,9 +24,9 @@ M4x4 create_zero_m4x4()
 	return res;
 }
 
-M4x4 translate_m4x4(Vec3 v)
+M4x4 m4x4_translate(Vec3 v)
 {
-	M4x4 res = create_identity_m4x4();
+	M4x4 res = m4x4_create_identity();
 	res.m[0][3] = v.x;
 	res.m[1][3] = v.y;
 	res.m[2][3] = v.z;
@@ -34,22 +34,22 @@ M4x4 translate_m4x4(Vec3 v)
 	return res;
 }
 
-M4x4 rotate_m4x4(Vec3 v)
+M4x4 m4x4_rotate(Vec3 v)
 {
 	// TODO: Implement
-	return create_identity_m4x4();
+	return m4x4_create_identity();
 }
 
-M4x4 scale_m4x4(Vec3 v)
+M4x4 m4x4_scale(Vec3 v)
 {
 	// TODO: Implement
-	return create_identity_m4x4();
+	return m4x4_create_identity();
 }
 
-M4x4 mul_m4x4(M4x4 m1, M4x4 m2)
+M4x4 m4x4_mul(M4x4 m1, M4x4 m2)
 {
 	int i, q, j;
-	M4x4 res = create_zero_m4x4();
+	M4x4 res = m4x4_create_zero();
 	/* m1 rows */
 	for (i = 0; i < 4; i++)
 	{
@@ -91,7 +91,7 @@ M4x4 mul_m4x4(M4x4 m1, M4x4 m2)
 	return res;
 }
 
-Vec3 mul_m4x4_vec3(M4x4 m, Vec3 v)
+Vec3 m4x4_mul_vec3(M4x4 m, Vec3 v)
 {
 	/* 
 		Assume last coefficient w is 1, 
@@ -111,7 +111,7 @@ Vec3 mul_m4x4_vec3(M4x4 m, Vec3 v)
    1 - the second column (y basis vector)
    2 - the third column  (z basis vector)
 */
-Vec3 get_basis_vector(M4x4 m, int loc)
+Vec3 m4x4_get_basis_vector(M4x4 m, int loc)
 {
 	Vec3 res;
 	res.x = m.m[0][loc];
@@ -121,7 +121,7 @@ Vec3 get_basis_vector(M4x4 m, int loc)
 	return res;
 }
 
-void print_matrix(M4x4 m)
+void m4x4_print(M4x4 m)
 {
 	if (!DEBUG)
 		return;
