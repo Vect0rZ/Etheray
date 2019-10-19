@@ -85,7 +85,7 @@ int main(int argc, char** argv)
 	objects[3] = s3;
 	objects[4] = t1;
 	
-	bmp16* bmp = create_new(BMP_ID, width, height);
+	bmp16* bmp = bmp16_create_new(BMP_ID, width, height);
 	bmp16_pixel pix;
 	pix.r = 160;
 	pix.g = 196;
@@ -120,11 +120,11 @@ int main(int argc, char** argv)
 			pix.g = (unsigned char)(255 * (avg_g / (RAYS_PER_PIXEL)));
 			pix.b = (unsigned char)(255 * (avg_b / (RAYS_PER_PIXEL)));
 			
-			set_at(bmp, pix, i, j);
+			bmp16_set_pixel_at(bmp, pix, i, j);
 		}
 	}
 	printf("Done looping. Max distance: %f, Min distance %f;", max_dist, min_distance);
-	save_optimized(bmp);
+	bmp16_save(bmp);
 	
 	free(bmp->pixels);
 	free(bmp);

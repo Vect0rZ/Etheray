@@ -5,7 +5,7 @@
 #include "constants.h"
 #include "file.h"
 
-bmp16* create_new(int id, int width, int height)
+bmp16* bmp16_create_new(int id, int width, int height)
 {
 	bmp16* bmp = malloc(sizeof(bmp16));
 
@@ -38,7 +38,7 @@ bmp16* create_new(int id, int width, int height)
 	return bmp;
 }
 
-bmp16* read_bmp_single_read(const char* file)
+bmp16* bmp16_single_read(const char* file)
 {
 	bmp16* bmp = malloc(sizeof(bmp16));
 	FILE* fd = fopen(file, "rb+");
@@ -85,7 +85,7 @@ bmp16* read_bmp_single_read(const char* file)
 	{
 		for (j = 0; j < width; j++)
 		{
-			bmp->pixels[ind++] = get_pixel(&data);
+			bmp->pixels[ind++] = bmp16_get_pixel(&data);
 		}
 		skip_pad(&data, bmp->pad);
 	}
@@ -93,7 +93,7 @@ bmp16* read_bmp_single_read(const char* file)
 	return bmp;
 }
 
-bmp16_pixel get_pixel(unsigned char** data)
+bmp16_pixel bmp16_get_pixel(unsigned char** data)
 {
 	bmp16_pixel pixel;
 	char components[3];
@@ -109,7 +109,7 @@ bmp16_pixel get_pixel(unsigned char** data)
 	return pixel;
 }
 
-void save_optimized(bmp16* bmp)
+void bmp16_save(bmp16* bmp)
 {
 	FILE* fd = fopen("output/result.bmp", "wb+");
 	int file_size = sizeof(char) * 54 + sizeof(char)*((bmp->dib.width * bmp->dib.height * 3) + bmp->dib.width * bmp->pad);
@@ -153,14 +153,14 @@ void save_optimized(bmp16* bmp)
 	fclose(fd);
 }
 
-bmp16_pixel get_at(bmp16* bmp, int i, int j)
+bmp16_pixel bmp16_get_pixel_at(bmp16* bmp, int i, int j)
 {
 	int index = (i * bmp->dib.width) + j;
 	
 	return bmp->pixels[index];
 }
 
-void set_at(bmp16* bmp, bmp16_pixel pixel, int i, int j)
+void bmp16_set_pixel_at(bmp16* bmp, bmp16_pixel pixel, int i, int j)
 {
 	int index = (i * bmp->dib.width) + j;
 	bmp->pixels[index] = pixel;

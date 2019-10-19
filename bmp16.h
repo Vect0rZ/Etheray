@@ -47,11 +47,11 @@ typedef struct bmp
 	int pad;
 } bmp16;
 
-bmp16* create_new(int id, int width, int height);
-bmp16* read_bmp_single_read(const char* file);
-bmp16_pixel get_pixel(unsigned char** data);
-void save_optimized(bmp16* bmp);
-bmp16_pixel get_at(bmp16* bmp, int i, int j);
-void set_at(bmp16* bmp, bmp16_pixel pixel, int i, int j);
+bmp16* bmp16_create_new(int id, int width, int height);
+bmp16* bmp16_single_read(const char* file);
+bmp16_pixel bmp16_get_pixel(unsigned char** data);
+void bmp16_save(bmp16* bmp);
+bmp16_pixel bmp16_get_pixel_at(bmp16* bmp, int i, int j);
+void bmp16_set_pixel_at(bmp16* bmp, bmp16_pixel pixel, int i, int j);
 
 #endif
