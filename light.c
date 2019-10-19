@@ -8,7 +8,7 @@ Light create_light(Vec3 origin, Vec3 direction, Color3f ambient, float intensity
 	res.direction = direction;
 	res.ambient = ambient;
 	
-	normalize(&res.direction);
+	vec3_normalize(&res.direction);
 	
 	return res;
 }

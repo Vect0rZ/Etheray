@@ -6,7 +6,7 @@ Vec3 surface_normal(Vec3 point, Object *object)
 	
 	if (object->type == SPHERE)
 	{
-		normal = sub_vectors(point, object->Obj.sphere.origin);
+		normal = vec3_sub(point, object->Obj.sphere.origin);
 	}
 	else if (object->type == PLANE)
 	{
@@ -15,12 +15,12 @@ Vec3 surface_normal(Vec3 point, Object *object)
 	else if (object->type == TRIANGLE)
 	{
 		/* Assume CCW winding */
-		Vec3 e0 = sub_vectors(object->Obj.triangle.v1, object->Obj.triangle.v0);
-		Vec3 e1 = sub_vectors(object->Obj.triangle.v2, object->Obj.triangle.v0);
-		normal = cross_product(e0, e1);
+		Vec3 e0 = vec3_sub(object->Obj.triangle.v1, object->Obj.triangle.v0);
+		Vec3 e1 = vec3_sub(object->Obj.triangle.v2, object->Obj.triangle.v0);
+		normal = vec3_cross_product(e0, e1);
 	}
 	
-	normalize(&normal);
+	vec3_normalize(&normal);
 	return normal;
 }
 

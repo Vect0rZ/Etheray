@@ -44,40 +44,40 @@ int main(int argc, char** argv)
 	int n_objects = 5;
 	Object *objects = malloc(sizeof(Object) * n_objects);
 	
-	Camera camera = create_camera(create_vec3(0, 0, 0), 70, 1, width, height);
-	Object s1 = create_sphere(create_vec3(2, 1, -15), 2,
+	Camera camera = create_camera(vec3_new(0, 0, 0), 70, 1, width, height);
+	Object s1 = create_sphere(vec3_new(2, 1, -15), 2,
 							  c_mat(REFLECTIVE,
 									c_col3f(0.811, 0.988, 0.454), 
 									c_col3f(0.36, 0.36, 0.36), 
 									c_col3f(0.7, 0.7, 0.7),
 									20, 0.7));
-	Object s2 = create_sphere(create_vec3(-6, 0, -15), 4,
+	Object s2 = create_sphere(vec3_new(-6, 0, -15), 4,
 							  c_mat(REFLECTIVE,
 								c_col3f(0.282, 0.376, 0.498), 
 								c_col3f(0.7, 0.7, 0.7), 
 								c_col3f(0.2, 0.2, 0.2),
 								10, 0.07));
-	Object s3 = create_sphere(create_vec3(2.5, 2, -7), 1.2, 
+	Object s3 = create_sphere(vec3_new(2.5, 2, -7), 1.2, 
 							  c_mat(REFLECTIVE,
 									c_col3f(1, 0.223, 0.301), 
 									c_col3f(0.1, 0.1, 0.1), 
 									c_col3f(0.36, 0.36, 0.36),
 									20, 0.4));
 	/* Plane located on the origin, and with normal pointing UP. (XZ plane) */
-	Object p1 = create_plane(create_vec3(0, -4, 0), create_vec3(0, 1, 0),
+	Object p1 = create_plane(vec3_new(0, -4, 0), vec3_new(0, 1, 0),
 							 c_mat(REFLECTIVE,
 								   c_col3f(0.1, 0.1, 0.1), 
 								   c_col3f(0.1, 0.1, 0.1), 
 								   c_col3f(0.1, 0.1, 0.1),
 								   7, 0.2));
-	 Object t1 = create_triangle(create_vec3(-7, 4, -15), create_vec3(7, 4, -15), create_vec3(0, 7, -10),
+	 Object t1 = create_triangle(vec3_new(-7, 4, -15), vec3_new(7, 4, -15), vec3_new(0, 7, -10),
 								c_mat(REFLECTIVE,
 									  c_col3f(0.2, 0.37, 0.7),
 									  c_col3f(0.2, 0.2, 0.2),
 									  c_col3f(0.7, 0.7, 0.7), 2, 0.4)); 
 	
 	/* Light with origin somewhere top and a bit further */
-	Light light = create_light(create_vec3(20, 12, 10), create_vec3(-1, -1, -2), c_col3f(0.4, 0.4, 0.4), 55.0f);
+	Light light = create_light(vec3_new(20, 12, 10), vec3_new(-1, -1, -2), c_col3f(0.4, 0.4, 0.4), 55.0f);
 	
 	objects[0] = s1;
 	objects[1] = s2;
@@ -145,7 +145,7 @@ Ray pixel_trace(Camera *camera, int i, int j, float bx, float by)
 {
 	/* The carhtesian coordinate system. */
 	M4x4 world_coordinate_space = create_identity_m4x4();
-	M4x4 camera_translate = translate_m4x4(create_vec3(-1, 3, 1));
+	M4x4 camera_translate = translate_m4x4(vec3_new(-1, 3, 1));
 	M4x4 camera_coordinate_space = mul_m4x4(camera_translate, world_coordinate_space);
 	
 	/* Fake a rotation since the rotation matrix is not yet supported */
@@ -178,9 +178,9 @@ Ray pixel_trace(Camera *camera, int i, int j, float bx, float by)
 	/* Transform both the origin and direction to the camera's coordinate system */
 	/* (Or we can transform the whole direction after substracting the origin and the point) */
 	ray.origin = mul_m4x4_vec3(camera_coordinate_space, ray.origin);
-	ray.direction = mul_m4x4_vec3(camera_coordinate_space, create_vec3(Cx, Cy, -1));
-	ray.direction = sub_vectors(ray.direction, ray.origin);
-	normalize(&ray.direction);
+	ray.direction = mul_m4x4_vec3(camera_coordinate_space, vec3_new(Cx, Cy, -1));
+	ray.direction = vec3_sub(ray.direction, ray.origin);
+	vec3_normalize(&ray.direction);
 
 	return ray;
 }
@@ -233,13 +233,13 @@ Intersection ray_sphere_intersection(Ray *ray, Sphere *sphere)
 	res.has_intersection = 0;
 	res.distance = 0;
 	
-	float dist_to_center = dist(ray->origin, sphere->origin);
-	Vec3 L = sub_vectors(sphere->origin, ray->origin);
-	float tca = dot_product(L, ray->direction);
+	float dist_to_center = vec3_distance(ray->origin, sphere->origin);
+	Vec3 L = vec3_sub(sphere->origin, ray->origin);
+	float tca = vec3_dot_product(L, ray->direction);
 	if (tca < 0)
 		return res;
 	
-	float d2 = dot_product(L, L) - tca * tca;
+	float d2 = vec3_dot_product(L, L) - tca * tca;
 	float thc = sqrt(pow(sphere->radius, 2) - d2);
 	float t0 = tca - thc;
 	float t1 = tca + thc;
@@ -261,8 +261,8 @@ Intersection ray_sphere_intersection(Ray *ray, Sphere *sphere)
 	if (d2 < sphere->radius * sphere->radius)
 	{
 		res.has_intersection = 1;
-		res.point = add_vectors(ray->origin, mul_vector(ray->direction, coefficient));
-		res.distance = dist(ray->origin, res.point);
+		res.point = vec3_add(ray->origin, vec3_mul(ray->direction, coefficient));
+		res.distance = vec3_distance(ray->origin, res.point);
 	}
 	
 	return res;
@@ -274,18 +274,18 @@ Intersection ray_plane_intersection(Ray *ray, Plane *plane)
 	res.has_intersection = 0;
 	res.distance = 10000;
 	Vec3 intersection_point;
-	Vec3 point_ray_origin = sub_vectors(ray->origin, plane->point);
-	float d1 = dot_product(point_ray_origin, plane->normal);
-	float d2 = dot_product(ray->direction, plane->normal) * (-1);
+	Vec3 point_ray_origin = vec3_sub(ray->origin, plane->point);
+	float d1 = vec3_dot_product(point_ray_origin, plane->normal);
+	float d2 = vec3_dot_product(ray->direction, plane->normal) * (-1);
 	float t = d1 / d2;
 	
-	intersection_point = add_vectors(ray->origin, mul_vector(ray->direction, t));
-	float intersects = dot_product(sub_vectors(plane->point, intersection_point), plane->normal);
+	intersection_point = vec3_add(ray->origin, vec3_mul(ray->direction, t));
+	float intersects = vec3_dot_product(vec3_sub(plane->point, intersection_point), plane->normal);
 	if (fabsf(intersects) <= EPSILON && t > 0)
 	{
 		/* printf("I %.25f, T: %.25f\n", intersects, t); */
 		res.has_intersection = 1;
-		res.distance = dist(ray->origin, intersection_point);
+		res.distance = vec3_distance(ray->origin, intersection_point);
 		res.point = intersection_point;
 	}
 	
@@ -301,54 +301,54 @@ Intersection ray_triangle_intersection(Ray *ray, Triangle *triangle)
 	   Compute the tri's normal, assuming CCW winding
 	   We get the two vertecies e0 and e1 represented by v1-v0 and v2-v0
 	*/
-	Vec3 e0 = sub_vectors(triangle->v1, triangle->v0);
-	Vec3 e1 = sub_vectors(triangle->v2, triangle->v1);
-	Vec3 e2 = sub_vectors(triangle->v0, triangle->v2);
-	Vec3 N = cross_product(e0, e1);
+	Vec3 e0 = vec3_sub(triangle->v1, triangle->v0);
+	Vec3 e1 = vec3_sub(triangle->v2, triangle->v1);
+	Vec3 e2 = vec3_sub(triangle->v0, triangle->v2);
+	Vec3 N = vec3_cross_product(e0, e1);
 	
 	/* Check the angle between the ray and the triangle.
 	   If its near 0, ray is parallel to the triangle. 
 	*/
-	float ndotray = dot_product(N, ray->direction);
+	float ndotray = vec3_dot_product(N, ray->direction);
 	if (fabs(ndotray) < EPSILON)
 		return res;
 	
 	/* Choose randomly one of the points on the triangle's plane, e.g. v0 */
 	/* Find the point P where the ray intersects the triangle plane */
-	Vec3 point_to_origin = sub_vectors(ray->origin, triangle->v0);
-	float nom = dot_product(point_to_origin, N);
-	float denom = dot_product(ray->direction, N) * (-1);
+	Vec3 point_to_origin = vec3_sub(ray->origin, triangle->v0);
+	float nom = vec3_dot_product(point_to_origin, N);
+	float denom = vec3_dot_product(ray->direction, N) * (-1);
 	float t = nom/denom;
 	
 	/* P = O + tD, for given t */
-	P = add_vectors(ray->origin, mul_vector(ray->direction, t));
+	P = vec3_add(ray->origin, vec3_mul(ray->direction, t));
 	if (t < 0)
 		return res;
 	
 	/* VP is the vector from the intersection point and the vertex */
 	/* C is the normal vector given by the VP and the edge */
-	Vec3 vp = sub_vectors(P, triangle->v0);
-	Vec3 C = cross_product(e0, vp);
+	Vec3 vp = vec3_sub(P, triangle->v0);
+	Vec3 C = vec3_cross_product(e0, vp);
 
-	if (dot_product(N, C) < 0)
+	if (vec3_dot_product(N, C) < 0)
 		return res;
 	
-	vp = sub_vectors(P, triangle->v1);
-	C = cross_product(e1, vp);
+	vp = vec3_sub(P, triangle->v1);
+	C = vec3_cross_product(e1, vp);
 	
-	if (dot_product(N, C) < 0)
+	if (vec3_dot_product(N, C) < 0)
 		return res;
 	
-	vp = sub_vectors(P, triangle->v2);
-	C = cross_product(e2, vp);
+	vp = vec3_sub(P, triangle->v2);
+	C = vec3_cross_product(e2, vp);
 	
-	if (dot_product(N, C) < 0)
+	if (vec3_dot_product(N, C) < 0)
 		return res;
 	
 	if (t > 0)
 	{
 		res.has_intersection = 1;
-		res.distance = dist(ray->origin, P);
+		res.distance = vec3_distance(ray->origin, P);
 		res.point = P;
 	}
 	
@@ -417,16 +417,6 @@ Intersection ray_trace(Ray *ray, Object *objects, int count, Light *light, int d
 	return res_in;
 }
 
-Vec3 reflect(Vec3 in, Vec3 surface_normal)
-{
-	Vec3 refl;
-	float dot = dot_product(in, surface_normal);
-	Vec3 double_normal = mul_vector(mul_vector(surface_normal, 2), dot);
-	refl = sub_vectors(in, double_normal);
-	normalize(&refl);
-	return refl;
-}
-
 Color3f ambient(Ray *ray, Intersection *intersection)
 {
 	return mul_c3f_c(intersection->obj.mat.ambient, 0.4); /* Hardcoded scene ambient coefficient */
@@ -445,15 +435,15 @@ Color3f phong(Ray *ray, Intersection *intersection, Light *light, Object* object
 	
 	Vec3 p = intersection->point;
 	Vec3 n = surface_normal(p, &intersection->obj);
-	Vec3 s = sub_vectors(light->origin, intersection->point);
+	Vec3 s = vec3_sub(light->origin, intersection->point);
 	Vec3 ld = light->direction;
 	
-	normalize(&n);
-	normalize(&s);
+	vec3_normalize(&n);
+	vec3_normalize(&s);
 	
 	Ray shadow_ray;
 	shadow_ray.direction = s;
-	shadow_ray.origin = fix_point(&p, &n);
+	shadow_ray.origin = vec3_add_delta(&p, &n);
 
 	if (intersects(&shadow_ray, objects, count).has_intersection)
 	{
@@ -461,16 +451,16 @@ Color3f phong(Ray *ray, Intersection *intersection, Light *light, Object* object
 	}
 	else
 	{
-		Vec3 sr = reflect(mul_vector(s, -1), n);
+		Vec3 sr = vec3_reflect(vec3_mul(s, -1), n);
 		float intens = 0, sintens = 0;
 		
-		intens = dot_product(s, n);
+		intens = vec3_dot_product(s, n);
 		/* Both diffuse and specular should be included only if the dotproduct is positive */
 		if (intens < 0) 
 			intens = 0;
 		else /* The specular component should be included only if we have diffuse at the point */
 		{
-			sintens = dot_product(sr, mul_vector(ray->direction, -1));
+			sintens = vec3_dot_product(sr, vec3_mul(ray->direction, -1));
 			if (sintens < 0) sintens = 0;
 		}
 		
@@ -495,8 +485,8 @@ Color3f reflection(Ray *ray, Intersection *intersection, Object *objects, int co
 		Vec3 sphere_normal = surface_normal(intersection->point, &intersection->obj);
 	
 		Ray next;
-		next.direction = reflect(ray->direction, sphere_normal);
-		next.origin = fix_point(&intersection->point, &sphere_normal);
+		next.direction = vec3_reflect(ray->direction, sphere_normal);
+		next.origin = vec3_add_delta(&intersection->point, &sphere_normal);
 		
 		depth += 1;
 		Intersection in2 = ray_trace(&next, objects, count, light, depth);
