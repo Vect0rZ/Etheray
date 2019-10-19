@@ -20,9 +20,9 @@ typedef struct object
 	Type type;
 }Object;
 
-Vec3 surface_normal(Vec3 point, Object *object);
-Object create_sphere(Vec3 origin, float radius, Material material);
-Object create_plane(Vec3 point, Vec3 normal, Material material);
-Object create_triangle(Vec3 v0, Vec3 v1, Vec3 v2, Material material);
+Vec3 obj_surface_normal(Vec3 point, Object *object);
+Object obj_create_sphere(Vec3 origin, float radius, Material material);
+Object obj_create_plane(Vec3 point, Vec3 normal, Material material);
+Object obj_create_triangle(Vec3 v0, Vec3 v1, Vec3 v2, Material material);
 
 #endif

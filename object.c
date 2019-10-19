@@ -1,6 +1,6 @@
 #include "object.h"
 
-Vec3 surface_normal(Vec3 point, Object *object)
+Vec3 obj_surface_normal(Vec3 point, Object *object)
 {
 	Vec3 normal;
 	
@@ -24,7 +24,7 @@ Vec3 surface_normal(Vec3 point, Object *object)
 	return normal;
 }
 
-Object create_sphere(Vec3 origin, float radius, Material material)
+Object obj_create_sphere(Vec3 origin, float radius, Material material)
 {
 	Object res;
 	
@@ -38,7 +38,7 @@ Object create_sphere(Vec3 origin, float radius, Material material)
 	return res;
 }
 
-Object create_plane(Vec3 point, Vec3 normal, Material material)
+Object obj_create_plane(Vec3 point, Vec3 normal, Material material)
 {
 	Object res;
 	Plane plane;
@@ -52,7 +52,7 @@ Object create_plane(Vec3 point, Vec3 normal, Material material)
 	return res;
 }
 
-Object create_triangle(Vec3 v0, Vec3 v1, Vec3 v2, Material material)
+Object obj_create_triangle(Vec3 v0, Vec3 v1, Vec3 v2, Material material)
 {
 	Object res;
 	Triangle triangle;
