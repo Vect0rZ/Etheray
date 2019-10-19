@@ -43,7 +43,7 @@ bmp16* bmp16_single_read(const char* file)
 	bmp16* bmp = malloc(sizeof(bmp16));
 	FILE* fd = fopen(file, "rb+");
 	
-	long fsize = get_file_size(fd);
+	long fsize = file_size(fd);
 	unsigned char* data = malloc(sizeof(unsigned char) * fsize);
 	int fres = fread(data, sizeof(unsigned char), fsize, fd);
 	fclose(fd);
@@ -51,23 +51,23 @@ bmp16* bmp16_single_read(const char* file)
 	if (fres != fsize)
 		return 0;
 
-	bmp->header.id = get_short(&data);
-	bmp->header.size = get_int(&data);
-	bmp->header.non1 = get_short(&data);
-	bmp->header.non2 = get_short(&data);
-	bmp->header.pixel_array_offset = get_int(&data);
+	bmp->header.id = file_read_short(&data);
+	bmp->header.size = file_read_int(&data);
+	bmp->header.non1 = file_read_short(&data);
+	bmp->header.non2 = file_read_short(&data);
+	bmp->header.pixel_array_offset = file_read_int(&data);
 	
-	bmp->dib_size = get_int(&data);
-	bmp->dib.width = get_int(&data);
-	bmp->dib.height = get_int(&data);
-	bmp->dib.col_planes = get_short(&data);
-	bmp->dib.bits = get_short(&data);
-	bmp->dib.bi_rgb = get_int(&data);
-	bmp->dib.raw_size = get_int(&data);
-	bmp->dib.dpi_horizontal = get_int(&data);
-	bmp->dib.dpi_vertical = get_int(&data);
-	bmp->dib.col_palette = get_int(&data);
-	bmp->dib.col_important = get_int(&data);
+	bmp->dib_size = file_read_int(&data);
+	bmp->dib.width = file_read_int(&data);
+	bmp->dib.height = file_read_int(&data);
+	bmp->dib.col_planes = file_read_short(&data);
+	bmp->dib.bits = file_read_short(&data);
+	bmp->dib.bi_rgb = file_read_int(&data);
+	bmp->dib.raw_size = file_read_int(&data);
+	bmp->dib.dpi_horizontal = file_read_int(&data);
+	bmp->dib.dpi_vertical = file_read_int(&data);
+	bmp->dib.col_palette = file_read_int(&data);
+	bmp->dib.col_important = file_read_int(&data);
 
 	int i, j, ind = 0;
 	int width = bmp->dib.width;
@@ -87,7 +87,7 @@ bmp16* bmp16_single_read(const char* file)
 		{
 			bmp->pixels[ind++] = bmp16_get_pixel(&data);
 		}
-		skip_pad(&data, bmp->pad);
+		file_skip_pad(&data, bmp->pad);
 	}
 
 	return bmp;
@@ -119,13 +119,13 @@ void bmp16_save(bmp16* bmp)
 	int debug = 0;
 	bmp16_pixel* pix_cpy = bmp->pixels;
 	
-	set_data(&file_cpy, (unsigned char*)&bmp->header.id, sizeof(short));
-	set_data(&file_cpy, (unsigned char*)&bmp->header.size, sizeof(int));
-	set_data(&file_cpy, (unsigned char*)&bmp->header.non1, sizeof(short));
-	set_data(&file_cpy, (unsigned char*)&bmp->header.non2, sizeof(short));
-	set_data(&file_cpy, (unsigned char*)&bmp->header.pixel_array_offset, sizeof(int));
-	set_data(&file_cpy, (unsigned char*)&bmp->dib_size, sizeof(int));
-	set_data(&file_cpy, (unsigned char*)&bmp->dib, sizeof(bmp16_dib));
+	file_write_data(&file_cpy, (unsigned char*)&bmp->header.id, sizeof(short));
+	file_write_data(&file_cpy, (unsigned char*)&bmp->header.size, sizeof(int));
+	file_write_data(&file_cpy, (unsigned char*)&bmp->header.non1, sizeof(short));
+	file_write_data(&file_cpy, (unsigned char*)&bmp->header.non2, sizeof(short));
+	file_write_data(&file_cpy, (unsigned char*)&bmp->header.pixel_array_offset, sizeof(int));
+	file_write_data(&file_cpy, (unsigned char*)&bmp->dib_size, sizeof(int));
+	file_write_data(&file_cpy, (unsigned char*)&bmp->dib, sizeof(bmp16_dib));
 	
 	int width = bmp->dib.width;
 	int height = bmp->dib.height;
@@ -141,11 +141,11 @@ void bmp16_save(bmp16* bmp)
 			i_pix |= pixel.g << 8;
 			i_pix |= pixel.b;
 
-			set_data(&file_cpy, (unsigned char*)&i_pix, 3);
+			file_write_data(&file_cpy, (unsigned char*)&i_pix, 3);
 		}
 
 		if (bmp->pad > 0)
-			set_data(&file_cpy, pad, sizeof(unsigned char) * bmp->pad);
+			file_write_data(&file_cpy, pad, sizeof(unsigned char) * bmp->pad);
 	}
 	
 	fwrite(file, sizeof(unsigned char), file_size, fd);

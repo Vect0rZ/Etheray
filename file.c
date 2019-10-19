@@ -4,7 +4,7 @@
 
 #include "file.h"
 
-long get_file_size(FILE* fd)
+long file_size(FILE* fd)
 {
 	long size = 0;
 	fseek(fd, 0, SEEK_END);
@@ -14,26 +14,26 @@ long get_file_size(FILE* fd)
 	return size;
 }
 
-short get_short(unsigned char** data)
+short file_read_short(unsigned char** data)
 {
 	short res = *((short*)*data);
 	*data += sizeof(short);
 	return res;
 }
 
-int get_int(unsigned char** data)
+int file_read_int(unsigned char** data)
 {
 	int res = *((int*)*data);
 	*data += sizeof(int);
 	return res;
 }
 
-void skip_pad(unsigned char** data, int pad)
+void file_skip_pad(unsigned char** data, int pad)
 {
 	(*data) += pad;
 }
 
-void set_data(unsigned char** arr, unsigned char* data, int size)
+void file_write_data(unsigned char** arr, unsigned char* data, int size)
 {
 	memcpy(*arr, data, size);
 	(*arr) += size;
