@@ -18,6 +18,6 @@ typedef struct camera
 	Screen screen;
 }Camera;
 
-Camera create_camera(Vec3 origin, float fov, float pDist, int w, int h);
+Camera camera_create(Vec3 origin, float fov, float pDist, int w, int h);
 
 #endif
