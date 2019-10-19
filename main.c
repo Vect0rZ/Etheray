@@ -46,32 +46,32 @@ int main(int argc, char** argv)
 	
 	Camera camera = camera_create(vec3_new(0, 0, 0), 70, 1, width, height);
 	Object s1 = create_sphere(vec3_new(2, 1, -15), 2,
-							  c_mat(REFLECTIVE,
+							  material_create(REFLECTIVE,
 									c_col3f(0.811, 0.988, 0.454), 
 									c_col3f(0.36, 0.36, 0.36), 
 									c_col3f(0.7, 0.7, 0.7),
 									20, 0.7));
 	Object s2 = create_sphere(vec3_new(-6, 0, -15), 4,
-							  c_mat(REFLECTIVE,
+							  material_create(REFLECTIVE,
 								c_col3f(0.282, 0.376, 0.498), 
 								c_col3f(0.7, 0.7, 0.7), 
 								c_col3f(0.2, 0.2, 0.2),
 								10, 0.07));
 	Object s3 = create_sphere(vec3_new(2.5, 2, -7), 1.2, 
-							  c_mat(REFLECTIVE,
+							  material_create(REFLECTIVE,
 									c_col3f(1, 0.223, 0.301), 
 									c_col3f(0.1, 0.1, 0.1), 
 									c_col3f(0.36, 0.36, 0.36),
 									20, 0.4));
 	/* Plane located on the origin, and with normal pointing UP. (XZ plane) */
 	Object p1 = create_plane(vec3_new(0, -4, 0), vec3_new(0, 1, 0),
-							 c_mat(REFLECTIVE,
+							 material_create(REFLECTIVE,
 								   c_col3f(0.1, 0.1, 0.1), 
 								   c_col3f(0.1, 0.1, 0.1), 
 								   c_col3f(0.1, 0.1, 0.1),
 								   7, 0.2));
 	 Object t1 = create_triangle(vec3_new(-7, 4, -15), vec3_new(7, 4, -15), vec3_new(0, 7, -10),
-								c_mat(REFLECTIVE,
+								material_create(REFLECTIVE,
 									  c_col3f(0.2, 0.37, 0.7),
 									  c_col3f(0.2, 0.2, 0.2),
 									  c_col3f(0.7, 0.7, 0.7), 2, 0.4)); 

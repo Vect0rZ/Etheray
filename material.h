@@ -14,6 +14,6 @@ typedef struct material
 	float reflectivity;
 }Material;
 
-Material c_mat(MaterialType type, Color3f ambient, Color3f specular, Color3f diffuse, float shininess, float reflectivity);
+Material material_create(MaterialType type, Color3f ambient, Color3f specular, Color3f diffuse, float shininess, float reflectivity);
 
 #endif
