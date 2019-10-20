@@ -18,6 +18,10 @@ typedef struct camera
 	Screen screen;
 }Camera;
 
-Camera camera_create(Vec3 origin, float fov, float pDist, int w, int h);
+/**
+ * Creates a new camera by given 
+ * location, field of view, view plane distance, width and height
+ * */
+Camera camera_new(Vec3 origin, float fov, float pDist, int w, int h);
 
 #endif

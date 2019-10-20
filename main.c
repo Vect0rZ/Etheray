@@ -44,7 +44,7 @@ int main(int argc, char** argv)
 	int n_objects = 5;
 	Object *objects = malloc(sizeof(Object) * n_objects);
 	
-	Camera camera = camera_create(vec3_new(0, 0, 0), 70, 1, width, height);
+	Camera camera = camera_new(vec3_new(0, 0, 0), 70, 1, width, height);
 	Object s1 = obj_create_sphere(vec3_new(2, 1, -15), 2,
 							  material_create(REFLECTIVE,
 									color3f_new(0.811, 0.988, 0.454), 

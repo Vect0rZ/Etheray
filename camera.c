@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include "camera.h"
 
-Camera camera_create(Vec3 origin, float fov, float pDist, int w, int h)
+Camera camera_new(Vec3 origin, float fov, float pDist, int w, int h)
 {
 	Camera res;
 	Screen sc;
