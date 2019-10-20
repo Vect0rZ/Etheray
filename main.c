@@ -124,7 +124,7 @@ int main(int argc, char** argv)
 		}
 	}
 	printf("Done looping. Max distance: %f, Min distance %f;", max_dist, min_distance);
-	bmp16_save(bmp);
+	bmp16_save(bmp, "output/result.bmp");
 	
 	free(bmp->pixels);
 	free(bmp);

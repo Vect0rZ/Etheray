@@ -51,13 +51,30 @@ typedef struct bmp
  * Creates a new bmp16 structure with predefined header and dib sections.
  * */
 bmp16* bmp16_create_new(int id, int width, int height);
+
 /**
- * 
+ * Reads a bmp16 file on a single pass.
  * */
 bmp16* bmp16_single_read(const char* file);
+
+/**
+ * Returns the nex pixel from preloaded bmp file. 
+ * */
 bmp16_pixel bmp16_get_pixel(unsigned char** data);
-void bmp16_save(bmp16* bmp);
+
+/**
+ * Save a bmp file on the given path.
+ * */
+void bmp16_save(bmp16* bmp, char* path);
+
+/**
+ * Get a pixel at a given (x, y) location (bottom left corner oriented).
+ * */
 bmp16_pixel bmp16_get_pixel_at(bmp16* bmp, int i, int j);
+
+/**
+ * Set a pixel at a given (x, y) location (bottom left corner oriented).
+ * */
 void bmp16_set_pixel_at(bmp16* bmp, bmp16_pixel pixel, int i, int j);
 
 #endif

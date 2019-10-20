@@ -109,9 +109,9 @@ bmp16_pixel bmp16_get_pixel(unsigned char** data)
 	return pixel;
 }
 
-void bmp16_save(bmp16* bmp)
+void bmp16_save(bmp16* bmp, char* path)
 {
-	FILE* fd = fopen("output/result.bmp", "wb+");
+	FILE* fd = fopen(path, "wb+");
 	int file_size = sizeof(char) * 54 + sizeof(char)*((bmp->dib.width * bmp->dib.height * 3) + bmp->dib.width * bmp->pad);
 	unsigned char* file = malloc(file_size);
 	unsigned char* file_cpy = file;
