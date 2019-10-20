@@ -2,7 +2,7 @@
 #include "color3f.h"
 #include "constants.h"
 
-Color3f c_col3f(float r, float g, float b)
+Color3f color3f_new(float r, float g, float b)
 {
 	Color3f res;
 	res.r = r;
@@ -12,7 +12,7 @@ Color3f c_col3f(float r, float g, float b)
 	return res;
 }
 
-Color3f mul_c3f(Color3f a, Color3f b)
+Color3f color3f_mul(Color3f a, Color3f b)
 {
 	a.r *= b.r;
 	a.g *= b.g;
@@ -21,7 +21,7 @@ Color3f mul_c3f(Color3f a, Color3f b)
 	return a;
 }
 
-Color3f mul_c3f_c(Color3f a, float c)
+Color3f color3f_mul_color(Color3f a, float c)
 {
 	a.r *= c;
 	a.g *= c;
@@ -30,7 +30,7 @@ Color3f mul_c3f_c(Color3f a, float c)
 	return a;
 }
 
-Color3f add_c3f(Color3f a, Color3f b)
+Color3f color3f_add(Color3f a, Color3f b)
 {
 	a.r += b.r;
 	a.g += b.g;
@@ -39,7 +39,7 @@ Color3f add_c3f(Color3f a, Color3f b)
 	return a;
 }
 
-Color3f cl_c3f(Color3f a)
+Color3f color3f_clamp(Color3f a)
 {
 	if (a.r > 1) a.r = 1;
 	if (a.g > 1) a.g = 1;
@@ -48,7 +48,7 @@ Color3f cl_c3f(Color3f a)
 	return a;
 }
 
-void print_c3f(Color3f a)
+void color3f_print(Color3f a)
 {
 	if (!DEBUG)
 		return;

@@ -47,7 +47,13 @@ typedef struct bmp
 	int pad;
 } bmp16;
 
+/**
+ * Creates a new bmp16 structure with predefined header and dib sections.
+ * */
 bmp16* bmp16_create_new(int id, int width, int height);
+/**
+ * 
+ * */
 bmp16* bmp16_single_read(const char* file);
 bmp16_pixel bmp16_get_pixel(unsigned char** data);
 void bmp16_save(bmp16* bmp);
