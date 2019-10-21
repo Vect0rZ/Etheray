@@ -8,6 +8,9 @@ typedef struct color
 	unsigned char b;
 }Color;
 
-Color create_color(unsigned char r, unsigned char g, unsigned char b);
+/**
+ * Creates a color by given RGB components (0-255).
+ * */
+Color color_new(unsigned char r, unsigned char g, unsigned char b);
 
 #endif

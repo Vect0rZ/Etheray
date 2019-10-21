@@ -1,6 +1,6 @@
 #include "color.h"
 
-Color create_color(unsigned char r, unsigned char g, unsigned char b)
+Color color_new(unsigned char r, unsigned char g, unsigned char b)
 {
 	Color res;
 	res.r = r;
