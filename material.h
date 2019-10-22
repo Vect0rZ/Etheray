@@ -14,6 +14,11 @@ typedef struct material
 	float reflectivity;
 }Material;
 
-Material material_create(MaterialType type, Color3f ambient, Color3f specular, Color3f diffuse, float shininess, float reflectivity);
+/**
+ * Creates a new material by given
+ * material type, ambient, specular and diffuse emit colors, 
+ * shininess and reflectivity of the material.
+ * */
+Material material_new(MaterialType type, Color3f ambient, Color3f specular, Color3f diffuse, float shininess, float reflectivity);
 
 #endif

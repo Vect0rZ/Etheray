@@ -12,6 +12,10 @@ typedef struct light
 	Color3f ambient;
 }Light;
 
-Light create_light(Vec3 origin, Vec3 direction, Color3f ambient, float intensity);
+/**
+ * Creates a new environment light by given
+ * origin, direction, ambient color and light intensity.
+ * */
+Light light_new(Vec3 origin, Vec3 direction, Color3f ambient, float intensity);
 
 #endif

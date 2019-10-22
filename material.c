@@ -1,6 +1,6 @@
 #include "material.h"
 
-Material material_create(MaterialType type, Color3f ambient, Color3f specular, Color3f diffuse, float shininess, float reflectivity)
+Material material_new(MaterialType type, Color3f ambient, Color3f specular, Color3f diffuse, float shininess, float reflectivity)
 {
 	Material res;
 	res.type = type;

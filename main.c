@@ -46,38 +46,38 @@ int main(int argc, char** argv)
 	
 	Camera camera = camera_new(vec3_new(0, 0, 0), 70, 1, width, height);
 	Object s1 = obj_create_sphere(vec3_new(2, 1, -15), 2,
-							  material_create(REFLECTIVE,
+							  material_new(REFLECTIVE,
 									color3f_new(0.811, 0.988, 0.454), 
 									color3f_new(0.36, 0.36, 0.36), 
 									color3f_new(0.7, 0.7, 0.7),
 									20, 0.7));
 	Object s2 = obj_create_sphere(vec3_new(-6, 0, -15), 4,
-							  material_create(REFLECTIVE,
+							  material_new(REFLECTIVE,
 								color3f_new(0.282, 0.376, 0.498), 
 								color3f_new(0.7, 0.7, 0.7), 
 								color3f_new(0.2, 0.2, 0.2),
 								10, 0.07));
 	Object s3 = obj_create_sphere(vec3_new(2.5, 2, -7), 1.2, 
-							  material_create(REFLECTIVE,
+							  material_new(REFLECTIVE,
 									color3f_new(1, 0.223, 0.301), 
 									color3f_new(0.1, 0.1, 0.1), 
 									color3f_new(0.36, 0.36, 0.36),
 									20, 0.4));
 	/* Plane located on the origin, and with normal pointing UP. (XZ plane) */
 	Object p1 = obj_create_plane(vec3_new(0, -4, 0), vec3_new(0, 1, 0),
-							 material_create(REFLECTIVE,
+							 material_new(REFLECTIVE,
 								   color3f_new(0.1, 0.1, 0.1), 
 								   color3f_new(0.1, 0.1, 0.1), 
 								   color3f_new(0.1, 0.1, 0.1),
 								   7, 0.2));
 	 Object t1 = obj_create_triangle(vec3_new(-7, 4, -15), vec3_new(7, 4, -15), vec3_new(0, 7, -10),
-								material_create(REFLECTIVE,
+								material_new(REFLECTIVE,
 									  color3f_new(0.2, 0.37, 0.7),
 									  color3f_new(0.2, 0.2, 0.2),
 									  color3f_new(0.7, 0.7, 0.7), 2, 0.4)); 
 	
 	/* Light with origin somewhere top and a bit further */
-	Light light = create_light(vec3_new(20, 12, 10), vec3_new(-1, -1, -2), color3f_new(0.4, 0.4, 0.4), 55.0f);
+	Light light = light_new(vec3_new(20, 12, 10), vec3_new(-1, -1, -2), color3f_new(0.4, 0.4, 0.4), 55.0f);
 	
 	objects[0] = s1;
 	objects[1] = s2;
