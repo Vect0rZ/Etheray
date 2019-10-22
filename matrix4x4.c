@@ -1,4 +1,6 @@
 #include <stdio.h>
+#include <math.h>
+
 #include "matrix4x4.h"
 #include "constants.h"
 
@@ -36,8 +38,51 @@ M4x4 m4x4_translate(Vec3 v)
 
 M4x4 m4x4_rotate(Vec3 v)
 {
-	// TODO: Implement
-	return m4x4_create_identity();
+	float x_r = v.x * (M_PI / 180);
+	float y_r = v.y * (M_PI / 180);
+	float z_r = v.z * (M_PI / 180);
+	M4x4 x = m4x4_rotate_x(x_r);
+	M4x4 y = m4x4_rotate_y(y_r);
+	M4x4 z = m4x4_rotate_z(z_r);
+
+	M4x4 res = m4x4_mul(z, m4x4_mul(y, x));
+	return res;
+}
+
+M4x4 m4x4_rotate_x(float radians)
+{
+	M4x4 res = m4x4_create_identity();
+	res.m[0][0] = 1;
+	res.m[1][1] = cosf(radians);
+	res.m[1][2] = -sinf(radians);
+	res.m[2][1] = sinf(radians);
+	res.m[2][2] = cosf(radians);
+
+	return res;
+}
+
+M4x4 m4x4_rotate_y(float radians)
+{
+	M4x4 res = m4x4_create_identity();
+	res.m[0][0] = cosf(radians);
+	res.m[0][2] = sinf(radians);
+	res.m[2][0] = -sinf(radians);
+	res.m[2][2] = cosf(radians);
+	res.m[1][1] = 1;
+
+	return res;
+}
+
+M4x4 m4x4_rotate_z(float radians)
+{
+	M4x4 res = m4x4_create_identity();
+	res.m[0][0] = cosf(radians);
+	res.m[0][1] = sinf(radians);
+	res.m[1][0] = -sinf(radians);
+	res.m[1][1] = cosf(radians);
+	res.m[2][2] = 1;
+
+	return res;
 }
 
 M4x4 m4x4_scale(Vec3 v)

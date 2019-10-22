@@ -145,8 +145,9 @@ Ray pixel_trace(Camera *camera, int i, int j, float bx, float by)
 {
 	/* The carhtesian coordinate system. */
 	M4x4 world_coordinate_space = m4x4_create_identity();
+	M4x4 camera_rotate = m4x4_rotate(vec3_new(-20, 0, 0));
 	M4x4 camera_translate = m4x4_translate(vec3_new(-1, 3, 1));
-	M4x4 camera_coordinate_space = m4x4_mul(camera_translate, world_coordinate_space);
+	M4x4 camera_coordinate_space = m4x4_mul(m4x4_mul(camera_translate, world_coordinate_space), camera_rotate);
 	
 	/* Fake a rotation since the rotation matrix is not yet supported */
 	// camera_coordinate_space.m[0][0] += 0.5;
