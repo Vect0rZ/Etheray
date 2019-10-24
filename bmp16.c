@@ -5,11 +5,11 @@
 #include "constants.h"
 #include "file.h"
 
-bmp16* bmp16_create_new(int id, int width, int height)
+bmp16* bmp16_create_new(int width, int height)
 {
 	bmp16* bmp = malloc(sizeof(bmp16));
 
-	bmp->header.id = id;
+	bmp->header.id = BMP_ID;
 	bmp->header.size = 14;
 	bmp->header.non1 = 0;
 	bmp->header.non2 = 0;
@@ -77,14 +77,11 @@ bmp16* bmp16_single_read(const char* file)
 	int row_bytes = width * BYTES_PER_PIXEL_24;
 	if ((row_bytes) % 4 != 0)
 		bmp->pad = 4 - (row_bytes % 4);
-	printf("1.Debug\n");
-	printf("PAD: %i\n", bmp->pad);
+
 	bmp->pixels = malloc(sizeof(bmp16_pixel) * bmp->pixel_count);
 
-	for (i = 0; i < height; i++)
-	{
-		for (j = 0; j < width; j++)
-		{
+	for (i = 0; i < height; i++) {
+		for (j = 0; j < width; j++) {
 			bmp->pixels[ind++] = bmp16_get_pixel(&data);
 		}
 		file_skip_pad(&data, bmp->pad);
@@ -130,10 +127,8 @@ void bmp16_save(bmp16* bmp, char* path)
 	int width = bmp->dib.width;
 	int height = bmp->dib.height;
 	int i, j;
-	for (i = 0; i < height; i++)
-	{
-		for (j = 0; j < width; j++)
-		{
+	for (i = 0; i < height; i++) {
+		for (j = 0; j < width; j++) {
 			bmp16_pixel pixel = *pix_cpy++;
 			int i_pix = 0;
 

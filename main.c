@@ -85,7 +85,7 @@ int main(int argc, char** argv)
 	objects[3] = s3;
 	objects[4] = t1;
 	
-	bmp16* bmp = bmp16_create_new(BMP_ID, width, height);
+	bmp16* bmp = bmp16_create_new(width, height);
 	bmp16_pixel pix;
 	pix.r = 160;
 	pix.g = 196;

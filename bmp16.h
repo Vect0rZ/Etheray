@@ -50,7 +50,7 @@ typedef struct bmp
 /**
  * Creates a new bmp16 structure with predefined header and dib sections.
  * */
-bmp16* bmp16_create_new(int id, int width, int height);
+bmp16* bmp16_create_new(int width, int height);
 
 /**
  * Reads a bmp16 file on a single pass.
