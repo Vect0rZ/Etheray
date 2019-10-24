@@ -99,13 +99,10 @@ int main(int argc, char** argv)
 	float light_factor = 2;
 	Intersection in;
 	
-	for (i = 0; i < height; i++)
-	{
-		for (j = 0; j < width; j++)
-		{
+	for (i = 0; i < height; i++) {
+		for (j = 0; j < width; j++) {
 			float avg_r = 0, avg_b = 0, avg_g = 0;
-			for (r = 0; r < RAYS_PER_PIXEL; r++)
-			{
+			for (r = 0; r < RAYS_PER_PIXEL; r++) {
 				/* Generate ray */
 				rays[r] = generate_pixel_ray(RANDOM, &camera, i, j, RAYS_PER_PIXEL, r);
 				/* Trace the color */
@@ -126,6 +123,7 @@ int main(int argc, char** argv)
 	printf("Done looping. Max distance: %f, Min distance %f;", max_dist, min_distance);
 	bmp16_save(bmp, "output/result.bmp");
 	
+	free(objects);
 	free(bmp->pixels);
 	free(bmp);
 
@@ -148,14 +146,6 @@ Ray pixel_trace(Camera *camera, int i, int j, float bx, float by)
 	M4x4 camera_rotate = m4x4_rotate(vec3_new(-20, 0, 0));
 	M4x4 camera_translate = m4x4_translate(vec3_new(-1, 3, 1));
 	M4x4 camera_coordinate_space = m4x4_mul(m4x4_mul(camera_translate, world_coordinate_space), camera_rotate);
-	
-	/* Fake a rotation since the rotation matrix is not yet supported */
-	// camera_coordinate_space.m[0][0] += 0.5;
-	// camera_coordinate_space.m[1][0] += 0.5;
-	// camera_coordinate_space.m[2][0] += 0.5;
-	// camera_coordinate_space.m[0][1] -= 0.5;
-	// camera_coordinate_space.m[1][1] += 0.5;
-	// camera_coordinate_space.m[2][1] -= 0.5;
 	
 	Ray ray;
 	ray.origin = camera->origin;
@@ -189,37 +179,31 @@ Ray pixel_trace(Camera *camera, int i, int j, float bx, float by)
 Ray generate_pixel_ray(SamplingMethod method, Camera* camera, int i, int j, int maxRays, int currentRay)
 {
 	float bx, by;
-	switch(method)
-	{
-		case SINGLE_CENTER_RAY:
-		{
+	switch(method) {
+		case SINGLE_CENTER_RAY: {
 			bx = 1/2;
 			by = 1/2;
 			break;
 		}
-		case DISTRIBUTED:
-		{
+		case DISTRIBUTED: {
 			float dx = 1 / (float)sqrt(maxRays);
 			float dy = 1 / (float)sqrt(maxRays);
 			bx = ((currentRay % 4) * dx / 2);
 			by = ((int)(currentRay / 4) * dy / 2);
 			break;
 		}
-		case JITTERED:
-		{
+		case JITTERED: {
 			/* NOT IMPLEMENTED */
 			bx = 1/2;
 			by = 1/2;
 			break;
 		}
-		case RANDOM:
-		{
+		case RANDOM: {
 			bx = 1.0f / ((rand() % RAYS_PER_PIXEL) + 1);
 			by = 1.0f / ((rand() % RAYS_PER_PIXEL) + 1);
 			break;
 		}
-		default:
-		{
+		default: {
 			bx = 1/2;
 			by = 1/2;
 		}
@@ -246,21 +230,19 @@ Intersection ray_sphere_intersection(Ray *ray, Sphere *sphere)
 	float t1 = tca + thc;
 	
 	
-	if (t0 > t1)
-	{
+	if (t0 > t1) {
 		float temp = t0;
 		t0 = t1;
 		t1 = temp;
 	}
-	if (t0 < 0)
-	{
+	if (t0 < 0) {
 		t0 = t1;
-		if (t0 < 0) return res;
+		if (t0 < 0) 
+			return res;
 	}
 	
 	float coefficient = t0;
-	if (d2 < sphere->radius * sphere->radius)
-	{
+	if (d2 < sphere->radius * sphere->radius) {
 		res.has_intersection = 1;
 		res.point = vec3_add(ray->origin, vec3_mul(ray->direction, coefficient));
 		res.distance = vec3_distance(ray->origin, res.point);
@@ -282,9 +264,7 @@ Intersection ray_plane_intersection(Ray *ray, Plane *plane)
 	
 	intersection_point = vec3_add(ray->origin, vec3_mul(ray->direction, t));
 	float intersects = vec3_dot_product(vec3_sub(plane->point, intersection_point), plane->normal);
-	if (fabsf(intersects) <= EPSILON && t > 0)
-	{
-		/* printf("I %.25f, T: %.25f\n", intersects, t); */
+	if (fabsf(intersects) <= EPSILON && t > 0) {
 		res.has_intersection = 1;
 		res.distance = vec3_distance(ray->origin, intersection_point);
 		res.point = intersection_point;
@@ -346,8 +326,7 @@ Intersection ray_triangle_intersection(Ray *ray, Triangle *triangle)
 	if (vec3_dot_product(N, C) < 0)
 		return res;
 	
-	if (t > 0)
-	{
+	if (t > 0) {
 		res.has_intersection = 1;
 		res.distance = vec3_distance(ray->origin, P);
 		res.point = P;
@@ -368,26 +347,20 @@ Intersection intersects(Ray *ray, Object *objects, int count)
 	int i;
 	Object hit;
 	float nearest_dist = 10000000;
-	for (i = 0; i < count; i++)
-	{
+	for (i = 0; i < count; i++) {
 		Object c = objects[i];
-		if (c.type == SPHERE)
-		{
+		if (c.type == SPHERE) {
 			in = ray_sphere_intersection(ray, &(c.Obj.sphere));
 		}
-		else if (c.type == PLANE)
-		{
+		else if (c.type == PLANE) {
 			in = ray_plane_intersection(ray, &(c.Obj.plane));
 		}
-		else if (c.type == TRIANGLE)
-		{
+		else if (c.type == TRIANGLE) {
 			in = ray_triangle_intersection(ray, &(c.Obj.triangle));
 		}
 		
-		if (in.has_intersection > 0)
-		{
-			if (nearest_dist >= in.distance)
-			{
+		if (in.has_intersection > 0) {
+			if (nearest_dist >= in.distance) {
 				res_in.has_intersection = 1;
 				res_in.obj = c;
 				res_in.point = in.point;
@@ -404,8 +377,7 @@ Intersection ray_trace(Ray *ray, Object *objects, int count, Light *light, int d
 {
 	Intersection res_in = intersects(ray, objects, count);
 	
-	if (res_in.has_intersection)
-	{
+	if (res_in.has_intersection) {
 		Color3f a = ambient(ray, &res_in);
 		Color3f ph = phong(ray, &res_in, light, objects, count);
 		Color3f re = reflection(ray, &res_in, objects, count, light, depth);
@@ -446,12 +418,10 @@ Color3f phong(Ray *ray, Intersection *intersection, Light *light, Object* object
 	shadow_ray.direction = s;
 	shadow_ray.origin = vec3_add_delta(&p, &n);
 
-	if (intersects(&shadow_ray, objects, count).has_intersection)
-	{
+	if (intersects(&shadow_ray, objects, count).has_intersection) {
 		/* Do nothing? */
 	}
-	else
-	{
+	else {
 		Vec3 sr = vec3_reflect(vec3_mul(s, -1), n);
 		float intens = 0, sintens = 0;
 		
@@ -459,8 +429,8 @@ Color3f phong(Ray *ray, Intersection *intersection, Light *light, Object* object
 		/* Both diffuse and specular should be included only if the dotproduct is positive */
 		if (intens < 0) 
 			intens = 0;
-		else /* The specular component should be included only if we have diffuse at the point */
-		{
+		else {
+			/* The specular component should be included only if we have diffuse at the point */
 			sintens = vec3_dot_product(sr, vec3_mul(ray->direction, -1));
 			if (sintens < 0) sintens = 0;
 		}
@@ -481,8 +451,7 @@ Color3f reflection(Ray *ray, Intersection *intersection, Object *objects, int co
 {
 	Color3f c = color3f_new(0, 0, 0);
 	
-	if (depth < MAX_DEPTH && intersection->obj.mat.type == REFLECTIVE)
-	{
+	if (depth < MAX_DEPTH && intersection->obj.mat.type == REFLECTIVE) {
 		Vec3 sphere_normal = obj_surface_normal(intersection->point, &intersection->obj);
 	
 		Ray next;
@@ -491,8 +460,7 @@ Color3f reflection(Ray *ray, Intersection *intersection, Object *objects, int co
 		
 		depth += 1;
 		Intersection in2 = ray_trace(&next, objects, count, light, depth);
-		if (in2.has_intersection)
-		{
+		if (in2.has_intersection) {
 			c = color3f_mul_color(in2.col, intersection->obj.mat.reflectivity);
 		}
 	}
