@@ -151,6 +151,8 @@ void bmp16_save(bmp16* bmp, char* path)
 	fwrite(file, sizeof(unsigned char), file_size, fd);
 	perror("Err");
 	fclose(fd);
+
+	free(file);
 }
 
 bmp16_pixel bmp16_get_pixel_at(bmp16* bmp, int i, int j)
