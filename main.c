@@ -15,6 +15,7 @@
 #include "camera.h"
 #include "light.h"
 #include "intersection.h"
+#include "scene_file.h"
 
 typedef struct ray
 {
@@ -39,8 +40,10 @@ Color3f reflection(Ray *ray, Intersection *intersection, Object *objects, int co
 
 int main(int argc, char** argv)
 {
-	int width = 1280;
-	int height = 720;
+	scene_file_read("input/scene.et");
+	
+	int width = 640;
+	int height = 360;
 	int n_objects = 5;
 	Object *objects = malloc(sizeof(Object) * n_objects);
 	
@@ -143,7 +146,7 @@ Ray pixel_trace(Camera *camera, int i, int j, float bx, float by)
 {
 	/* The carhtesian coordinate system. */
 	M4x4 world_coordinate_space = m4x4_create_identity();
-	M4x4 camera_rotate = m4x4_rotate(vec3_new(-20, 0, 0));
+	M4x4 camera_rotate = m4x4_rotate(vec3_new(10, 0, 0));
 	M4x4 camera_translate = m4x4_translate(vec3_new(-1, 3, 1));
 	M4x4 camera_coordinate_space = m4x4_mul(m4x4_mul(camera_translate, world_coordinate_space), camera_rotate);
 	

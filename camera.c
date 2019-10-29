@@ -13,10 +13,10 @@ Camera camera_new(Vec3 origin, float fov, float pDist, int w, int h)
 	sc.width = w;
 	sc.height = h;
 	sc.aspect_ratio = (float)w / (float)h;
-	printf("W: %i, H: %i\n", w, h);
+	// printf("W: %i, H: %i\n", w, h);
 	
 	res.screen = sc;
 	
-	printf("AR: %f", sc.aspect_ratio);
+	// printf("AR: %f", sc.aspect_ratio);
 	return res;
 }
