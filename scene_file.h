@@ -3,6 +3,19 @@
 
 #include "object.h"
 
-Object* scene_file_read(char* file);
+typedef struct scene {
+    int width;
+    int height;
+    Object objects[];
+} Scene;
+
+typedef struct tokens
+{
+    int count;
+    char** tokens;
+} Tokens;
+
+Scene scene_file_read(char* file);
+Tokens tokenize(char* str, char delimiter);
 
 #endif
