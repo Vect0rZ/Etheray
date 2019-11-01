@@ -94,12 +94,13 @@ int main()
 
 	float max_dist = -1.0f;
 	float min_distance = 1000000.0f;
+	float avg_r, avg_g, avg_b;
 	Ray rays[RAYS_PER_PIXEL];
 	Intersection in;
 	
 	for (i = 0; i < height; i++) {
 		for (j = 0; j < width; j++) {
-			float avg_r = 0, avg_b = 0, avg_g = 0;
+			avg_r = avg_b = avg_g = 0;
 			for (r = 0; r < RAYS_PER_PIXEL; r++) {
 				/* Generate ray */
 				rays[r] = generate_pixel_ray(RANDOM, &camera, i, j, RAYS_PER_PIXEL, r);
