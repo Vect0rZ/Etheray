@@ -113,7 +113,7 @@ void bmp16_save(bmp16* bmp, char* path)
 	unsigned char* file = malloc(file_size);
 	unsigned char* file_cpy = file;
 	unsigned char pad[2] = {0,0};
-	int debug = 0;
+
 	bmp16_pixel* pix_cpy = bmp->pixels;
 	
 	file_write_data(&file_cpy, (unsigned char*)&bmp->header.id, sizeof(short));

@@ -90,13 +90,11 @@ int main(int argc, char** argv)
 	pix.r = 160;
 	pix.g = 196;
 	pix.b = 255;
-	int i, j, s, r, k;
-	Camera c;
-	Ray ray;
+	int i, j, r;
+
 	float max_dist = -1.0f;
 	float min_distance = 1000000.0f;
 	Ray rays[RAYS_PER_PIXEL];
-	float light_factor = 2;
 	Intersection in;
 	
 	for (i = 0; i < height; i++) {
@@ -218,7 +216,6 @@ Intersection ray_sphere_intersection(Ray *ray, Sphere *sphere)
 	res.has_intersection = 0;
 	res.distance = 0;
 	
-	float dist_to_center = vec3_distance(ray->origin, sphere->origin);
 	Vec3 L = vec3_sub(sphere->origin, ray->origin);
 	float tca = vec3_dot_product(L, ray->direction);
 	if (tca < 0)
@@ -345,7 +342,6 @@ Intersection intersects(Ray *ray, Object *objects, int count)
 	
 	/* Get the intersection point of the first met object */
 	int i;
-	Object hit;
 	float nearest_dist = 10000000;
 	for (i = 0; i < count; i++) {
 		Object c = objects[i];
@@ -409,7 +405,6 @@ Color3f phong(Ray *ray, Intersection *intersection, Light *light, Object* object
 	Vec3 p = intersection->point;
 	Vec3 n = obj_surface_normal(p, &intersection->obj);
 	Vec3 s = vec3_sub(light->origin, intersection->point);
-	Vec3 ld = light->direction;
 	
 	vec3_normalize(&n);
 	vec3_normalize(&s);
