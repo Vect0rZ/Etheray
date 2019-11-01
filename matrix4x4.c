@@ -87,8 +87,13 @@ M4x4 m4x4_rotate_z(float radians)
 
 M4x4 m4x4_scale(Vec3 v)
 {
-	// TODO: Implement
-	return m4x4_create_identity();
+	M4x4 res = m4x4_create_identity();
+	res.m[0][0] = v.x;
+	res.m[1][1] = v.y;
+	res.m[2][2] = v.z;
+	res.m[3][3] = 1;
+
+	return res;
 }
 
 M4x4 m4x4_mul(M4x4 m1, M4x4 m2)
