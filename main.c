@@ -32,12 +32,12 @@ Intersection intersects(Ray *ray, Object *objects, int count);
 Intersection ray_trace(Ray *ray, Object *objects, int count, Light *light, int depth);
 Ray reflection_ray(Vec3 point, Vec3 normal);
 /* Light methods */
-Color3f ambient(Ray *ray, Intersection *intersection);
+Color3f ambient(Intersection *intersection);
 Color3f phong(Ray *ray, Intersection *intersection, Light *light, Object* objects, int count);
 Color3f reflection(Ray *ray, Intersection *intersection, Object *objects, int count, Light* light, int depth);
 /* Material methods */
 
-int main(int argc, char** argv)
+int main()
 {
 	int width = 1280;
 	int height = 720;
@@ -374,7 +374,7 @@ Intersection ray_trace(Ray *ray, Object *objects, int count, Light *light, int d
 	Intersection res_in = intersects(ray, objects, count);
 	
 	if (res_in.has_intersection) {
-		Color3f a = ambient(ray, &res_in);
+		Color3f a = ambient(&res_in);
 		Color3f ph = phong(ray, &res_in, light, objects, count);
 		Color3f re = reflection(ray, &res_in, objects, count, light, depth);
 		
@@ -386,7 +386,7 @@ Intersection ray_trace(Ray *ray, Object *objects, int count, Light *light, int d
 	return res_in;
 }
 
-Color3f ambient(Ray *ray, Intersection *intersection)
+Color3f ambient(Intersection *intersection)
 {
 	return color3f_mul_color(intersection->obj.mat.ambient, 0.4); /* Hardcoded scene ambient coefficient */
 }
