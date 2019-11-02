@@ -6,7 +6,8 @@
 typedef struct scene {
     int width;
     int height;
-    Object objects[];
+    int n_objects;
+    Object* objects;
 } Scene;
 
 typedef struct tokens

@@ -41,7 +41,7 @@ Color3f reflection(Ray *ray, Intersection *intersection, Object *objects, int co
 int main(int argc, char** argv)
 {
 	scene_file_read("input/scene.et");
-	
+	return 0;
 	int width = 640;
 	int height = 360;
 	int n_objects = 5;

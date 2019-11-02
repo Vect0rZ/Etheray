@@ -4,6 +4,10 @@
 
 #include "file.h"
 #include "scene_file.h"
+#include "enums.h"
+#include "sphere.h"
+#include "triangle.h"
+#include "plane.h"
 
 Scene scene_file_read(char* file)
 {
@@ -15,24 +19,48 @@ Scene scene_file_read(char* file)
 
     char* data = malloc(sizeof(char) * line_size);
     char* line = fgets(data, line_size, fd);
-    printf("b");
+    Object current;
     while (line != NULL)
     {
         printf("%s", data);
-        if (data[0] == 'W')
-        {
-            printf("c");
-            Tokens res = tokenize(data, ' ');
-            printf("Token1: %s\n", res.tokens[0]);
-            printf("Token2: %s\n", res.tokens[1]);
+        Tokens res = tokenize(data, ' ');
+        char* id = res.tokens[0];
+        if (strcmp(id, "W") == 0) {
+            scene.width = atoi(res.tokens[1]);
         }
+        if (strcmp(id, "H") == 0) {
+            scene.height = atoi(res.tokens[1]);
+        }
+        if (strcmp(id, "NO") == 0) {
+            Tokens res = tokenize(data, ' ');
+
+            int n = atoi(res.tokens[1]);
+            scene.n_objects = n;
+            scene.objects = malloc(sizeof(scene.objects) * n);
+        }
+        if (strcmp(id, "Object [") == 0) {
             
+        }
+        if (strcmp(id, "Type")) {
+            if (strcmp(res.tokens[1], "Sphere") == 0) {
+                current.type = SPHERE;
+            }
+            else if (strcmp(res.tokens[1], "Plane") == 0) {
+                current.type = PLANE;
+            }
+            else if (strcmp(res.tokens[1], "Triangle") == 0) {
+                current.type = TRIANGLE;
+            }
+        }
+        if (strcmp(id, "Origin") == 0) {
+            
+        }
+
         line = fgets(data, line_size, fd);
-        printf("d");
     }
 
     free(data);
-    printf("e");
+    printf("e\n");
 
     return scene;
 }
@@ -43,30 +71,33 @@ Tokens tokenize(char* str, char delimiter)
     int tokens = 1;
     int i = 0, j = 0;
 
+    /* Skip leading chars */
+    while (*strptr == delimiter)
+        strptr++;
+
     while (*strptr++ != '\0')
         if (*strptr == delimiter)
             tokens++;
+        
     printf("Tokens: %i\n", tokens);
 
     Tokens res;
+    res.tokens = malloc(sizeof(res.tokens) * tokens);
     res.count = tokens;
-    res.tokens = malloc(sizeof(char*) * tokens);
 
-    /* Point back to begining of the string */
+    /* Point back to beginixng of the string */
     strptr = str;
-    printf("1");
     for (i = 0; i < tokens; i++)
     {
-        printf("2");
         /* Allocate max 16 chars for token */
         res.tokens[i] = malloc(sizeof(char) * 16);
-        printf("3");
-        do {
+        while (*strptr != delimiter && *strptr != '\0') {
             res.tokens[i][j++] = *strptr;
             strptr++;
-        } while (*strptr != delimiter);
-        printf("5");
-        
+        };
+
+        /* Skip the delimiter char */
+        strptr++;
         j = 0;
     }
 
